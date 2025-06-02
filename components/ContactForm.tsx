@@ -145,7 +145,7 @@ export const ContactForm = () => {
                 </div>
                 <div>
                   <h4 className="font-semibold text-primary">Адрес</h4>
-                  <p className="text-gray-700">г. Москва, ул. Строителей, д. 10</p>
+                  <p className="text-gray-700">г. Дмитров, ул. Профессиональная, д.7, пом.303</p>
                 </div>
               </div>
             </div>
