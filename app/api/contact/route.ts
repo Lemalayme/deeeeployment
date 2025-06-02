@@ -1,48 +1,46 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
-// Отключаем кэширование для этого роута
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
-  // Быстрая валидация данных
-  const { name, email, phone, message } = await request.json().catch(() => null);
-  if (!name || !email || !message) {
+  const { name, email, phone, message } = await request.json();
+  
+  // Проверяем наличие переменных окружения
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD || !process.env.EMAIL_TO) {
+    console.error('Missing email configuration in environment variables');
     return NextResponse.json(
-      { error: 'Неверные данные формы' },
-      { status: 400 }
+      { error: 'Server configuration error' },
+      { status: 500 }
     );
   }
 
-  // Конфигурация транспортера (лучше вынести в отдельный конфиг)
+  // Правильная конфигурация для Mail.ru
   const transporter = nodemailer.createTransport({
     host: 'smtp.mail.ru',
-    service: 'mail',
+    port: 465,
+    secure: true, // SSL
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD,
+      pass: process.env.EMAIL_PASSWORD
     },
-    secure: true, // Используем SSL
-    port: 465, // Стандартный порт для SSL
-    connectionTimeout: 5000, // 5 секунд таймаут
+    connectionTimeout: 5000
   });
 
   try {
-    // Быстрая отправка с таймаутом
-    const sendPromise = transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    await transporter.sendMail({
+      from: `"Website Form" <${process.env.EMAIL_USER}>`, // Форматируем правильно
       to: process.env.EMAIL_TO,
       subject: `Новая заявка от ${name}`,
-      text: `Имя: ${name}\nEmail: ${email}\nТелефон: ${phone}\nСообщение: ${message}`,
+      html: `
+        <h1>Новая заявка с сайта</h1>
+        <p><strong>Имя:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Телефон:</strong> ${phone || 'не указан'}</p>
+        <p><strong>Сообщение:</strong> ${message}</p>
+      `
     });
 
-    // Таймаут 8 секунд
-    const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Timeout')), 8000)
-    );
-
-    await Promise.race([sendPromise, timeoutPromise]);
-    
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Ошибка отправки:', error);
