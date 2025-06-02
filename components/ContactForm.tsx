@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useState } from 'react';
+import { FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -23,8 +24,9 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export const ContactForm = () => {
-  const [, setIsSubmitting] = useState(false);
-  const [, setSubmitSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
   
   const {
     register,
@@ -37,24 +39,28 @@ export const ContactForm = () => {
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
+    setSubmitStatus('idle');
+    setErrorMessage('');
+    
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
+        signal: AbortSignal.timeout(10000)
       });
 
-      const result = await response.json();
-      
       if (!response.ok) {
-        throw new Error(result.error || 'Ошибка при отправке формы');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Ошибка при отправке формы');
       }
 
-      setSubmitSuccess(true);
+      setSubmitStatus('success');
       reset();
-  
+    } catch (error) {
+      console.error('Ошибка:', error);
+      setSubmitStatus('error');
+      setErrorMessage(error instanceof Error ? error.message : 'Произошла ошибка при отправке');
     } finally {
       setIsSubmitting(false);
     }
@@ -68,22 +74,59 @@ export const ContactForm = () => {
           <div className="h-1 w-20 bg-accent mx-auto"></div>
         </div>
         
+        {/* Сообщение об успешной отправке */}
+        {submitStatus === 'success' && (
+          <div className="mb-8 p-4 bg-green-50 text-green-700 rounded-lg flex items-start gap-3">
+            <FiCheckCircle className="text-green-500 text-xl mt-0.5 flex-shrink-0" />
+            <div>
+              <h3 className="font-bold">Спасибо!</h3>
+              <p>Ваше сообщение успешно отправлено. Мы свяжемся с вами в ближайшее время.</p>
+            </div>
+          </div>
+        )}
+        
+        {/* Сообщение об ошибке */}
+        {submitStatus === 'error' && (
+          <div className="mb-8 p-4 bg-red-50 text-red-700 rounded-lg flex items-start gap-3">
+            <FiAlertCircle className="text-red-500 text-xl mt-0.5 flex-shrink-0" />
+            <div>
+              <h3 className="font-bold">Ошибка</h3>
+              <p>{errorMessage || 'Произошла ошибка при отправке формы'}</p>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto">
           <div className="bg-white p-8 rounded-lg shadow-md">
             <h3 className="text-xl font-bold text-primary mb-6">Наши контакты</h3>
             
             <div className="space-y-6">
               <div className="flex items-start gap-4">
-                 <Image src="/phone-svgrepo-com.svg" alt='Address Icon' width="50"height="50"/>
+                <div className="w-6 h-6 text-primary">
+                  <Image 
+                    src="/phone-svgrepo-com.svg" 
+                    alt="Phone Icon" 
+                    width={24} 
+                    height={24}
+                    className="w-full h-full object-contain filter brightness-0 invert-[60%]"
+                  />
+                </div>
                 <div>
                   <h4 className="font-semibold text-primary">Телефон</h4>
                   <p className="text-gray-700">+7 (123) 456-78-90</p>
                 </div>
               </div>
               
-              <div className="flex items-start gap-4 gap-x-6">
-                 <Image className=""
-                  src="/email-svgrepo-com.svg" alt='Address Icon' width="40"height="40" />
+              <div className="flex items-start gap-4">
+                <div className="w-6 h-6 text-primary">
+                  <Image 
+                    src="/email-svgrepo-com.svg" 
+                    alt="Email Icon" 
+                    width={24} 
+                    height={24}
+                    className="w-full h-full object-contain filter brightness-0 invert-[60%]"
+                  />
+                </div>
                 <div>
                   <h4 className="font-semibold text-primary">Почта</h4>
                   <p className="text-gray-700">dmitrovdor@mail.ru</p>
@@ -91,7 +134,15 @@ export const ContactForm = () => {
               </div>
               
               <div className="flex items-start gap-4">
-               <Image src="/address-svgrepo-com.svg" alt='Address Icon' width="50"height="50" />
+                <div className="w-6 h-6 text-primary">
+                  <Image 
+                    src="/address-svgrepo-com.svg" 
+                    alt="Address Icon" 
+                    width={24} 
+                    height={24}
+                    className="w-full h-full object-contain filter brightness-0 invert-[60%]"
+                  />
+                </div>
                 <div>
                   <h4 className="font-semibold text-primary">Адрес</h4>
                   <p className="text-gray-700">г. Москва, ул. Строителей, д. 10</p>
@@ -155,9 +206,22 @@ export const ContactForm = () => {
             
             <button
               type="submit"
-              className="w-full bg-primary text-white py-3 px-6 rounded-lg font-bold hover:bg-primary/90 transition-colors"
+              disabled={isSubmitting}
+              className={`w-full bg-primary text-white py-3 px-6 rounded-lg font-bold hover:bg-primary/90 transition-colors ${
+                isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
             >
-              Отправить заявку
+              {isSubmitting ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Отправка...
+                </span>
+              ) : (
+                'Отправить заявку'
+              )}
             </button>
           </form>
         </div>

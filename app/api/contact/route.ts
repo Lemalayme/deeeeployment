@@ -1,47 +1,53 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
-export async function POST(request: Request) {
-  try {
-    const { name, email, phone, message } = await request.json();
+// Отключаем кэширование для этого роута
+export const dynamic = 'force-dynamic';
 
-    // Создаем транспорт для отправки почты
-    const transporter = nodemailer.createTransport({
-      service: 'mail.ru', // или другой сервис
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-      },
+export async function POST(request: Request) {
+  // Быстрая валидация данных
+  const { name, email, phone, message } = await request.json().catch(() => null);
+  if (!name || !email || !message) {
+    return NextResponse.json(
+      { error: 'Неверные данные формы' },
+      { status: 400 }
+    );
+  }
+
+  // Конфигурация транспортера (лучше вынести в отдельный конфиг)
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.mail.ru',
+    service: 'mail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+    secure: true, // Используем SSL
+    port: 465, // Стандартный порт для SSL
+    connectionTimeout: 5000, // 5 секунд таймаут
+  });
+
+  try {
+    // Быстрая отправка с таймаутом
+    const sendPromise = transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_TO,
+      subject: `Новая заявка от ${name}`,
+      text: `Имя: ${name}\nEmail: ${email}\nТелефон: ${phone}\nСообщение: ${message}`,
     });
 
-    // Опции письма
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_TO, // Ваш email для получения писем
-      subject: `Новая заявка от ${name}`,
-      text: `
-        Имя: ${name}
-        Email: ${email}
-        Телефон: ${phone}
-        Сообщение: ${message}
-      `,
-      html: `
-        <h1>Новая заявка</h1>
-        <p><strong>Имя:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Телефон:</strong> ${phone}</p>
-        <p><strong>Сообщение:</strong> ${message}</p>
-      `,
-    };
+    // Таймаут 8 секунд
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Timeout')), 8000)
+    );
 
-    // Отправляем письмо
-    await transporter.sendMail(mailOptions);
-
-    return NextResponse.json({ message: 'Email sent successfully' });
+    await Promise.race([sendPromise, timeoutPromise]);
+    
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error('Ошибка отправки:', error);
     return NextResponse.json(
-      { error: 'Error sending email' },
+      { error: error instanceof Error ? error.message : 'Ошибка сервера' },
       { status: 500 }
     );
   }
