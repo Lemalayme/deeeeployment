@@ -16,7 +16,6 @@ export async function POST(request: Request) {
 
   // Конфигурация транспортера (лучше вынести в отдельный конфиг)
   const transporter = nodemailer.createTransport({
-    host: 'smtp.mail.ru',
     service: 'mail',
     auth: {
       user: process.env.EMAIL_USER,
