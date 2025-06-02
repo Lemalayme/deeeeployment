@@ -108,8 +108,7 @@ export const ContactForm = () => {
                     alt="Phone Icon" 
                     width={24} 
                     height={24}
-                    className="w-full h-full object-contain filter brightness-0 invert-[60%]"
-                  />
+                    />
                 </div>
                 <div>
                   <h4 className="font-semibold text-primary">Телефон</h4>
@@ -122,10 +121,9 @@ export const ContactForm = () => {
                   <Image 
                     src="/email-svgrepo-com.svg" 
                     alt="Email Icon" 
-                    width={24} 
-                    height={24}
-                    className="w-full h-full object-contain filter brightness-0 invert-[60%]"
-                  />
+                    width={40} 
+                    height={40}
+                     />
                 </div>
                 <div>
                   <h4 className="font-semibold text-primary">Почта</h4>
@@ -138,9 +136,8 @@ export const ContactForm = () => {
                   <Image 
                     src="/address-svgrepo-com.svg" 
                     alt="Address Icon" 
-                    width={24} 
-                    height={24}
-                    className="w-full h-full object-contain filter brightness-0 invert-[60%]"
+                    width={40} 
+                    height={40}
                   />
                 </div>
                 <div>
