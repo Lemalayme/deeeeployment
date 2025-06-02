@@ -23,8 +23,8 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export const ContactForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [, setIsSubmitting] = useState(false);
+  const [, setSubmitSuccess] = useState(false);
   
   const {
     register,
@@ -54,9 +54,7 @@ export const ContactForm = () => {
 
       setSubmitSuccess(true);
       reset();
-    } catch (error) {
-      console.error('Ошибка при отправке формы:', error);
-      alert(error.message || "Произошла ошибка при отправке формы. Пожалуйста, попробуйте позже.");
+  
     } finally {
       setIsSubmitting(false);
     }
@@ -115,7 +113,7 @@ export const ContactForm = () => {
                 <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
               )}
             </div>
-            
+      
             <div>
               <label htmlFor="email" className="block text-gray-700 mb-2">Email</label>
               <input
