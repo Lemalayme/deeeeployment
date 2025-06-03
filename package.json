@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
-    "@vercel/analytics": "^1.5.0",
     "mini-svg-data-uri": "^1.4.4",
     "next": "^15.3.2",
     "nodemailer": "^7.0.3",
