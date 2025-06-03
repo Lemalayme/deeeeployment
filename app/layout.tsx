@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "ru_RU",
-    url: "https://dmitrovdor.ru",
+    url: "https://dmitrovdor.vercel.app/",
     siteName: "Дмитровдор",
     images: [{
       url: "/Dmitrovdor.svg",
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   },
   
   // Дополнительные мета
-  authors: [{ name: "ООО 'Дмитровдор'", url: "https://dmitrovdor.ru" }],
+  authors: [{ name: "ООО 'Дмитровдор'", url: "https://dmitrovdor.vercel.app/" }],
   category: "construction",
   manifest: "/site.webmanifest",
 };

@@ -4,26 +4,47 @@ const features = [
   {
     title: 'Качество',
     description: 'Используем только проверенные материалы и технологии',
-    icon: '✓',
-    color: 'bg-blue-100/20'
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <path d="m9 12 2 2 4-4"/>
+      </svg>
+    ),
+    color: 'bg-blue-50 border border-blue-100'
   },
   {
     title: 'Сроки',
     description: 'Завершаем проекты точно в установленные сроки',
-    icon: '⏱️',
-    color: 'bg-orange-100/20'
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </svg>
+    ),
+    color: 'bg-orange-50 border border-orange-100'
   },
   {
     title: 'Опыт',
     description: '15 лет опыта в строительной отрасли',
-    icon: '🏗️',
-    color: 'bg-blue-100/20'
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+        <line x1="8" y1="21" x2="16" y2="21"/>
+        <line x1="12" y1="17" x2="12" y2="21"/>
+      </svg>
+    ),
+    color: 'bg-blue-50 border border-blue-100'
   },
   {
     title: 'Гарантия',
     description: 'Предоставляем гарантию на все выполненные работы',
-    icon: '🔧',
-    color: 'bg-orange-100/20'
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <path d="m9 12 2 2 4-4"/>
+      </svg>
+    ),
+    color: 'bg-orange-50 border border-orange-100'
   }
 ];
 
@@ -58,12 +79,14 @@ export const AboutUs = () => {
               {features.map((feature, index) => (
                 <div 
                   key={index} 
-                  className={`${feature.color} p-6 rounded-xl backdrop-blur-sm border border-gray-100 transition-all duration-300 hover:shadow-lg hover:-translate-y-2`}
+                  className={`${feature.color} p-6 rounded-xl backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 flex flex-col h-full`}
                 >
                   <div className="flex items-start gap-4">
-                    <span className="text-3xl text-primary">{feature.icon}</span>
+                    <div className="text-primary p-2 rounded-full bg-white shadow-sm border">
+                      {feature.icon}
+                    </div>
                     <div>
-                      <h3 className="text-xl font-bold text-primary mb-2">{feature.title}</h3>
+                      <h3 className="text-xl font-bold text-gray-800 mb-2">{feature.title}</h3>
                       <p className="text-gray-600 leading-relaxed">{feature.description}</p>
                     </div>
                   </div>
