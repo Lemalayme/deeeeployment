@@ -102,29 +102,25 @@ export const ContactForm = () => {
             
             <div className="space-y-6">
               <div className="flex items-start gap-4">
-                <div className="w-6 h-6 text-primary">
                   <Image 
                     src="/phone-svgrepo-com.svg" 
                     alt="Phone Icon" 
-                    width={24} 
-                    height={24}
+                    width={40} 
+                    height={40}
                     />
-                </div>
                 <div>
                   <h4 className="font-semibold text-primary">Телефон</h4>
                   <p className="text-gray-700">+7 (123) 456-78-90</p>
                 </div>
               </div>
               
-              <div className="flex items-start gap-4">
-                <div className="w-6 h-6 text-primary">
+              <div className="flex items-start gap-6">
                   <Image 
                     src="/email-svgrepo-com.svg" 
                     alt="Email Icon" 
-                    width={40} 
-                    height={40}
+                    width={30} 
+                    height={30}
                      />
-                </div>
                 <div>
                   <h4 className="font-semibold text-primary">Почта</h4>
                   <p className="text-gray-700">dmitrovdor@mail.ru</p>
@@ -132,14 +128,13 @@ export const ContactForm = () => {
               </div>
               
               <div className="flex items-start gap-4">
-                <div className="w-6 h-6 text-primary">
+                
                   <Image 
                     src="/address-svgrepo-com.svg" 
                     alt="Address Icon" 
                     width={40} 
                     height={40}
                   />
-                </div>
                 <div>
                   <h4 className="font-semibold text-primary">Адрес</h4>
                   <p className="text-gray-700">г. Дмитров, ул. Профессиональная, д.7, пом.303</p>
