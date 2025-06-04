@@ -5,7 +5,6 @@ import { Services } from '@/components/Services';
 import { Projects } from '@/components/Projects';
 import { ContactForm } from '@/components/ContactForm';
 import { Footer } from '@/components/Footer';
-
 export const metadata = {
   title: "Главная | Дмитровдор - Профессиональное строительство дорог",
   description: "ООО 'Дмитровдор': строительство, ремонт и асфальтирование дорог в Московской области. Работаем с 2010 года. Гарантия качества работ.",
@@ -14,9 +13,7 @@ export const metadata = {
     description: "Профессиональные дорожные работы в Дмитрове и Московской области",
     images: [
       {
-        src: "/Dmitrovdor.svg",
-        width: 1200,
-        height: 630,
+        src: "E:\Dmitrovdor.svg",
         alt: "Главная страница Дмитровдор",
       }
     ]

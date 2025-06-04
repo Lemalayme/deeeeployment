@@ -60,11 +60,10 @@ export default function DocumentsPage() {
         </div>
 
         {/* Дополнительная информация */}
-        <div className="mt-16 text-center">
-          <p className="text-gray-500">
-            Если у вас возникли проблемы с просмотром документов, пожалуйста, 
-          </p>
-        <Link rel="stylesheet" href="/" > свяжитесь с нами. </Link>
+        <div className="mt-16 text-center text-primary text-3xl ">
+          
+        <Link rel="stylesheet" href="/"  > вернуться  </Link>
+        
         </div>
       </div>
     </main>

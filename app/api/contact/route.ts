@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
-
 // Отключаем кэширование для этого роута
 export const dynamic = 'force-dynamic';
 
