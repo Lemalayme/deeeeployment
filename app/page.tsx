@@ -10,7 +10,7 @@ export const metadata = {
   title: "Главная | Дмитровдор - Профессиональное строительство дорог",
   
   description: "ООО 'Дмитровдор': строительство, ремонт и асфальтирование дорог в Московской области и Подмосковье.",
-  manifest: "/manifest.ts",
+  manifest: "/site.webmanifest.json",
   icons: {
     icon: '/favicon.ico', 
     apple: '/favicon.ico', 

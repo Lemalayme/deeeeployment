@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: {
     default: "ООО 'Дмитровдор' - Строительство дорог в Московской области",
-    template: "%s | Дмитровдор"
+    template: ""
   },
   description: "Профессиональное строительство и ремонт дорог от ООО 'Дмитровдор'. Работаем в Московской области с 2012 года. Гарантия качества.",
   keywords: ["строительство дорог", "ремонт дорог", "асфальтирование", "дорожные работы", "Дмитровдор", "Московская область"],
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "ru_RU",
-    url: "https://dmitrovdor.vercel.app/",
+    url: "https://dmitrovdor.ru/",
     siteName: "Дмитровдор",
     images: [{
       url: "/Dmitrovdor.svg",
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   // Дополнительные мета
   authors: [{ name: "ООО 'Дмитровдор'", url: "https://dmitrovdor.ru/" }],
   category: "construction",
-  manifest: "/manifest.ts",
+  manifest: "/site.webmanifest.json",
 };
 
 export const viewport: Viewport = {
