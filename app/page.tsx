@@ -8,6 +8,7 @@ import { Footer } from '@/components/Footer';
 
 export const metadata = {
   title: "Главная | Дмитровдор - Профессиональное строительство дорог",
+  
   description: "ООО 'Дмитровдор': строительство, ремонт и асфальтирование дорог в Московской области и Подмосковье.",
   manifest: "/manifest.ts",
   icons: {

@@ -56,9 +56,9 @@ export const metadata: Metadata = {
   },
   
   // Дополнительные мета
-  authors: [{ name: "ООО 'Дмитровдор'", url: "https://dmitrovdor.vercel.app/" }],
+  authors: [{ name: "ООО 'Дмитровдор'", url: "https://dmitrovdor.ru/" }],
   category: "construction",
-  manifest: "/site.webmanifest.json",
+  manifest: "/manifest.ts",
 };
 
 export const viewport: Viewport = {
