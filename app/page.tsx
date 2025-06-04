@@ -10,8 +10,7 @@ export const metadata = {
   description: "ООО 'Дмитровдор': строительство, ремонт и асфальтирование дорог...",
   icons: {
     icon: '/favicon.ico', 
-    shortcut: '/favicon-16x16.png', 
-    apple: '/apple-touch-icon.png', 
+    apple: '/favicon.ico', 
   },
   openGraph: {
     title: "Главная | Дмитровдор - Строительство дорог",
