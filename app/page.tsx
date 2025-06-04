@@ -5,9 +5,11 @@ import { Services } from '@/components/Services';
 import { Projects } from '@/components/Projects';
 import { ContactForm } from '@/components/ContactForm';
 import { Footer } from '@/components/Footer';
+
 export const metadata = {
   title: "Главная | Дмитровдор - Профессиональное строительство дорог",
-  description: "ООО 'Дмитровдор': строительство, ремонт и асфальтирование дорог...",
+  description: "ООО 'Дмитровдор': строительство, ремонт и асфальтирование дорог в Московской области и Подмосковье.",
+  manifest: "/manifest.ts",
   icons: {
     icon: '/favicon.ico', 
     apple: '/favicon.ico', 
@@ -17,7 +19,7 @@ export const metadata = {
     description: "Профессиональные дорожные работы...",
     images: [
       {
-        url: '/Dmitrovdor.svg', // Абсолютный URL!
+        url: '/Dmitrovdor.svg',
         width: 1200,
         height: 630,
         alt: 'Дмитровдор - строительство дорог',

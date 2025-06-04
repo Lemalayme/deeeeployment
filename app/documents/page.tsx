@@ -5,19 +5,16 @@ export default function DocumentsPage() {
   // Массив с PDF документами
   const pdfDocuments = [
     {
-      title: "Техническая документация",
-      description: "Полное техническое описание продукции и услуг",
-      file: "/documents/tech-docs.pdf"
+      title: "Свидетельства ИНН и ОГРН ДМИТРОВДОР",
+      file: "/Svidetelstvo.pdf"
     },
     {
-      title: "Руководство пользователя",
-      description: "Инструкция по эксплуатации оборудования",
-      file: "/documents/user-manual.pdf"
+      title: "Решение и приказ о продлении полномочий гендира Дмитровдор до 24.11.2023 г",
+      file: "/Prodlenie.pdf"
     },
     {
-      title: "Сертификаты соответствия",
-      description: "Официальные сертификаты качества продукции",
-      file: "/documents/certificates.pdf"
+      title: "СРО ДМИТРОВДОР",
+      file: "/documents/CPO.pdf"
     }
   ];
 
@@ -45,7 +42,6 @@ export default function DocumentsPage() {
                   <FaFilePdf className="text-red-500 text-3xl mr-4" />
                   <h2 className="text-xl font-semibold text-gray-800">{doc.title}</h2>
                 </div>
-                <p className="text-gray-600 mb-6">{doc.description}</p>
                 <Link 
                   href={doc.file} 
                   target="_blank"
