@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
-// Отключаем кэширование для этого роута
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
-  // Быстрая валидация данных
   const { name, email, phone, message } = await request.json().catch(() => null);
   if (!name || !email || !message) {
     return NextResponse.json(
@@ -13,7 +11,7 @@ export async function POST(request: Request) {
     );
   }
 
-  // Конфигурация транспортера (лучше вынести в отдельный конфиг)
+
   const transporter = nodemailer.createTransport({
     host: 'smtp.mail.ru',
     service: 'mail',
@@ -21,13 +19,13 @@ export async function POST(request: Request) {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASSWORD,
     },
-    secure: true, // Используем SSL
-    port: 465, // Стандартный порт для SSL
-    connectionTimeout: 5000, // 5 секунд таймаут
+    secure: true, 
+    port: 465,
+    connectionTimeout: 5000, 
   });
 
   try {
-    // Быстрая отправка с таймаутом
+  
     const sendPromise = transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_TO,
@@ -35,7 +33,6 @@ export async function POST(request: Request) {
       text: `Имя: ${name}\nEmail: ${email}\nТелефон: ${phone}\nСообщение: ${message}`,
     });
 
-    // Таймаут 8 секунд
     const timeoutPromise = new Promise((_, reject) => 
       setTimeout(() => reject(new Error('Timeout')), 8000)
     );
