@@ -47,12 +47,16 @@ export const ContactForm = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
-        signal: AbortSignal.timeout(10000)
       });
 
+      const result = await response.json();
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Ошибка при отправке формы');
+        throw new Error(
+          result.error?.message || 
+          result.error || 
+          'Ошибка при отправке формы'
+        );
       }
 
       setSubmitStatus('success');
@@ -60,7 +64,11 @@ export const ContactForm = () => {
     } catch (error) {
       console.error('Ошибка:', error);
       setSubmitStatus('error');
-      setErrorMessage(error instanceof Error ? error.message : 'Произошла ошибка при отправке');
+      setErrorMessage(
+        error instanceof Error ? 
+        error.message : 
+        'Произошла неизвестная ошибка при отправке'
+      );
     } finally {
       setIsSubmitting(false);
     }

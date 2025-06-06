@@ -1,9 +1,16 @@
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
+
+// Инициализация Resend
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
+  // Парсинг данных формы
   const { name, email, phone, message } = await request.json().catch(() => null);
+  
+  // Валидация обязательных полей
   if (!name || !email || !message) {
     return NextResponse.json(
       { error: 'Неверные данные формы' },
@@ -11,39 +18,37 @@ export async function POST(request: Request) {
     );
   }
 
-
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.mail.ru',
-    service: 'mail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD,
-    },
-    secure: true, 
-    port: 465,
-    connectionTimeout: 5000, 
-  });
-
   try {
-  
-    const sendPromise = transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_TO,
+    // Отправка письма через Resend
+    const { data, error } = await resend.emails.send({
+      from: 'dmitrovdor.store', // Используйте верифицированный домен
+      to: process.env.EMAIL_TO!, // Получатель из переменных окружения
       subject: `Новая заявка от ${name}`,
-      text: `Имя: ${name}\nEmail: ${email}\nТелефон: ${phone}\nСообщение: ${message}`,
+      text: `Имя: ${name}\nEmail: ${email}\nТелефон: ${phone || 'не указан'}\nСообщение: ${message}`,
+      // Альтернативно можно использовать HTML:
+      html: `
+        <h1>Новая заявка</h1>
+        <p><strong>Имя:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        ${phone ? `<p><strong>Телефон:</strong> ${phone}</p>` : ''}
+        <p><strong>Сообщение:</strong> ${message}</p>
+      `
     });
 
-    const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Timeout')), 8000)
-    );
+    if (error) {
+      console.error('Ошибка Resend:', error);
+      return NextResponse.json(
+        { error: 'Ошибка отправки письма' },
+        { status: 500 }
+      );
+    }
 
-    await Promise.race([sendPromise, timeoutPromise]);
+    return NextResponse.json({ success: true, data });
     
-    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Ошибка отправки:', error);
+    console.error('Неожиданная ошибка:', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Ошибка сервера' },
+      { error: error instanceof Error ? error.message : 'Внутренняя ошибка сервера' },
       { status: 500 }
     );
   }
