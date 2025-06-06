@@ -21,7 +21,7 @@ export async function POST(request: Request) {
   try {
     // Отправка письма через Resend
     const { data, error } = await resend.emails.send({
-      from: 'dmitrovdor.store', // Используйте верифицированный домен
+      from: 'mail@dmitrovdor.store', // Используйте верифицированный домен
       to: process.env.EMAIL_TO!, // Получатель из переменных окружения
       subject: `Новая заявка от ${name}`,
       text: `Имя: ${name}\nEmail: ${email}\nТелефон: ${phone || 'не указан'}\nСообщение: ${message}`,
