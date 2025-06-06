@@ -18,6 +18,8 @@ export async function POST(request: Request) {
     );
   }
 resend.domains.create({ name: 'dmitrovdor.store' });
+resend.domains.get('d91cd9bd-1176-453e-8fc1-35364d380206');
+resend.domains.verify('d91cd9bd-1176-453e-8fc1-35364d380206');
   try {
     // Отправка письма через Resend
     const { data, error } = await resend.emails.send({
