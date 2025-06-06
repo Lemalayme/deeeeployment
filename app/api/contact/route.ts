@@ -22,7 +22,7 @@ resend.domains.get('d91cd9bd-1176-453e-8fc1-35364d380206');
 resend.domains.verify('d91cd9bd-1176-453e-8fc1-35364d380206');
   try {
     // Отправка письма через Resend
-    const { data, error } = await resend.emails.send({
+    const { data} = await resend.emails.send({
       from: 'mail@dmitrovdor.store', // Используйте верифицированный домен
       to: process.env.EMAIL_TO!, // Получатель из переменных окружения
       subject: `Новая заявка от ${name}`,
@@ -37,21 +37,10 @@ resend.domains.verify('d91cd9bd-1176-453e-8fc1-35364d380206');
       `
     });
 
-    if (error) {
-      console.error('Ошибка Resend:', error);
-      return NextResponse.json(
-        { error: 'Ошибка отправки письма' },
-        { status: 500 }
-      );
-    }
+   
 
     return NextResponse.json({ success: true, data });
     
-  } catch (error) {
-    console.error('Неожиданная ошибка:', error);
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Внутренняя ошибка сервера' },
-      { status: 500 }
-    );
-  }
+ 
+  } catch (error) {}
 }
