@@ -42,5 +42,6 @@ resend.domains.verify('d91cd9bd-1176-453e-8fc1-35364d380206');
     return NextResponse.json({ success: true, data });
     
  
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {}
 }
