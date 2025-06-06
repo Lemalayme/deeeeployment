@@ -17,7 +17,7 @@ export async function POST(request: Request) {
       { status: 400 }
     );
   }
-
+resend.domains.create({ name: 'dmitrovdor.store' });
   try {
     // Отправка письма через Resend
     const { data, error } = await resend.emails.send({
