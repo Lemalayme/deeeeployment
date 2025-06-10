@@ -1,4 +1,3 @@
-
 'use client';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
@@ -27,6 +26,7 @@ type FormData = z.infer<typeof formSchema>;
 export const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
   
   const {
     register,
@@ -40,19 +40,32 @@ export const ContactForm = () => {
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     setSubmitStatus('idle');
+    setErrorMessage('');
     
-    // Имитация отправки с задержкой 500 мс
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    // Всегда показываем успешную отправку
-    setSubmitStatus('success');
-    reset();
-    setIsSubmitting(false);
-    
-    // Для отладки - выводим данные в консоль
-    console.log('Форма отправлена:', data);
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        signal: AbortSignal.timeout(10000)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Ошибка при отправке формы');
+      }
+
+      setSubmitStatus('success');
+      reset();
+    } catch (error) {
+      console.error('Ошибка:', error);
+      setSubmitStatus('error');
+      setErrorMessage(error instanceof Error ? error.message : 'Произошла ошибка при отправке');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
-  return (
+   return (
     <section id="contact" className="py-20 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
@@ -77,7 +90,7 @@ export const ContactForm = () => {
             <FiAlertCircle className="text-red-500 text-xl mt-0.5 flex-shrink-0" />
             <div>
               <h3 className="font-bold">Ошибка</h3>
-              
+              <p>{errorMessage || 'Произошла ошибка при отправке формы'}</p>
             </div>
           </div>
         )}

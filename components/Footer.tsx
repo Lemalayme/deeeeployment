@@ -27,7 +27,7 @@ export const Footer = () => {
             <ul className="space-y-2">
               <li className="flex items-center gap-2">
                 <span>📞</span>
-                <span>+7 (123) 456-78-90</span>
+                <span>+7 (966) 328-62-74</span>
               </li>
               <li className="flex items-center gap-2">
                 <span>✉️</span>

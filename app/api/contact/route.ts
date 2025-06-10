@@ -1,47 +1,50 @@
 import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
-
-// Инициализация Resend
-const resend = new Resend(process.env.RESEND_API_KEY);
-
+import nodemailer from 'nodemailer';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
-  // Парсинг данных формы
   const { name, email, phone, message } = await request.json().catch(() => null);
-  
-  // Валидация обязательных полей
   if (!name || !email || !message) {
     return NextResponse.json(
       { error: 'Неверные данные формы' },
       { status: 400 }
     );
   }
-resend.domains.create({ name: 'dmitrovdor.store' });
-resend.domains.get('d91cd9bd-1176-453e-8fc1-35364d380206');
-resend.domains.verify('d91cd9bd-1176-453e-8fc1-35364d380206');
+
+
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.mail.ru',
+    service: 'mail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+    secure: true, 
+    port: 465,
+    connectionTimeout: 5000, 
+  });
+
   try {
-    // Отправка письма через Resend
-    const { data} = await resend.emails.send({
-      from: 'mail@dmitrovdor.store', // Используйте верифицированный домен
-      to: process.env.EMAIL_TO!, // Получатель из переменных окружения
+  
+    const sendPromise = transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_TO,
       subject: `Новая заявка от ${name}`,
-      text: `Имя: ${name}\nEmail: ${email}\nТелефон: ${phone || 'не указан'}\nСообщение: ${message}`,
-      // Альтернативно можно использовать HTML:
-      html: `
-        <h1>Новая заявка</h1>
-        <p><strong>Имя:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        ${phone ? `<p><strong>Телефон:</strong> ${phone}</p>` : ''}
-        <p><strong>Сообщение:</strong> ${message}</p>
-      `
+      text: `Имя: ${name}\nEmail: ${email}\nТелефон: ${phone}\nСообщение: ${message}`,
     });
 
-   
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Timeout')), 8000)
+    );
 
-    return NextResponse.json({ success: true, data });
+    await Promise.race([sendPromise, timeoutPromise]);
     
- 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (error) {}
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Ошибка отправки:', error);
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Ошибка сервера' },
+      { status: 500 }
+    );
+  }
 }
